@@ -1,15 +1,17 @@
 {
   "name": "functions",
   "scripts": {
-    "build": "tsc",
+    "lint": "eslint 'src/**/*.{js,ts}'",
+    "build": "npm run lint && tsc",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
+    "test": "jest",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "8"
+    "node": "10"
   },
   "main": "lib/index.js",
   "dependencies": {
@@ -17,7 +19,33 @@
     "firebase-functions": "^3.1.0"
   },
   "devDependencies": {
+    "@types/eslint": "^7.2.0",
+    "@types/eslint-plugin-prettier": "^3.1.0",
+    "@types/jest": "^26.0.5",
+    "@types/prettier": "^2.0.2",
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.18.0",
+    "eslint-plugin-prefer-arrow": "^1.2.2",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.1.0",
+    "prettier": "^2.0.5",
+    "ts-jest": "^26.1.3",
     "typescript": "^3.2.2"
   },
-  "private": true
+  "private": true,
+  "jest": {
+    "preset": "ts-jest",
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts?|js?)$",
+    "moduleFileExtensions":
+    [
+      "ts",
+      "json",
+      "js"
+    ]
+  }
 }
