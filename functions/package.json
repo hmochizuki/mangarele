@@ -6,6 +6,7 @@
     "dbseed": "npm run dbseed:publishers",
     "dbseed:publishers": "node lib/commands/dbseed.js publishers seeds/publishers.tsv",
     "lint": "eslint 'src/**/*.{js,ts}'",
+    "lint:fix": "eslint --fix 'src/**/*.{js,ts}'",
     "build": "npm run lint && tsc",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
