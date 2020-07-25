@@ -13,6 +13,7 @@ const functionMap = {
 
 const devFunctionMap = {
   publishers: "./publishers",
+  searchBooks: "./search-books",
 };
 
 const loadFunctions = (fnMap: typeof functionMap) => {

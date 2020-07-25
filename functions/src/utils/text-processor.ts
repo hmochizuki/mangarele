@@ -1,3 +1,6 @@
+import { uniq } from "lodash";
+import { bigram } from "./n-gram";
+
 export const halfWiden = (text: string) =>
   text
     .replace(/[！-～]/g, (match) =>
@@ -116,14 +119,57 @@ export const kanaFullWiden = (text: string) => {
     .replace(/ﾟ/g, "゜");
 };
 
+export const chopChink = (text: string) =>
+  text
+    .replace(/[-/&!?@_,.:;"'~]/g, " ")
+    .replace(/[−‐―／＆！？＿，．：；“”‘’〜～]/g, " ")
+    .replace(/[♪、。]/g, " ")
+    .replace(/[・×☆★*＊]/g, "")
+    .replace(/\(([^)]*)\)/g, " $1")
+    .replace(/（([^〕]*)）/g, " $1")
+    .replace(/〔([^〕]*)〕/g, " $1")
+    .replace(/「([^」]*)」/g, " $1")
+    .replace(/『([^』]*)』/g, " $1")
+    .replace(/【([^】]*)】/g, " $1")
+    .replace(/\[([^\]]*)\]/g, " $1")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
 export const normalize = (text: string | null) =>
-  halfWiden(kanaFullWiden(text || ""))
+  halfWiden(hira2kata(kanaFullWiden(text || "")))
     .replace(/[☆★♪×・、。]/g, "")
     .replace(/[-*/&!?@_,.:;"']/g, "")
     .replace(/\s+/g, "")
-    .toLowerCase();
+    .toLowerCase()
+    .replace(/[()〔〕「」『』【】[\]]/g, "");
 
 export const uniform = (text: string | null) =>
   halfWiden(kanaFullWiden(text || ""))
     .replace(/\s+/g, " ")
     .trim();
+
+export const tokenize = (...words: string[]) => {
+  const resultArr: string[] = [];
+  let preVal = "";
+
+  halfWiden(hira2kata(kanaFullWiden(chopChink(words.join(" ")))))
+    .toLowerCase()
+    .split(" ")
+    .forEach((val) => {
+      if (val.match(/^[0-9a-z+]+$/)) {
+        if (val.length > 3 && val.match(/[sS]$/)) {
+          resultArr.push(val.substring(0, val.length - 1));
+        } else {
+          resultArr.push(val);
+        }
+        preVal = "";
+      } else if (val.length === 1 && /^[亜-黑]+$/u.test(val)) {
+        preVal = val;
+      } else {
+        bigram(`${preVal}${val}`).forEach((cut) => resultArr.push(cut));
+        preVal = "";
+      }
+    });
+
+  return uniq(resultArr);
+};

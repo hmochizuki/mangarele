@@ -13,7 +13,9 @@ export const feedCalendar = async (page: puppeteer.Page) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   for await (const _ of [0, 1]) {
-    const items = await page.$$(".comicList .contIn .contR .spaceSp .block");
+    const items = await page.$$(
+      ".contentIn .comicList .contIn .contR .spaceSp .block"
+    );
 
     for await (const item of items) {
       const memo = { ...blankFeedMemo };
@@ -28,7 +30,7 @@ export const feedCalendar = async (page: puppeteer.Page) => {
       memos.push(memo);
     }
 
-    await page.click(".linkTitW > ul > li:nth-child(2)");
+    await page.click(".contentIn > .linkTitW > ul > li:nth-child(2)");
   }
 
   return memos;

@@ -2,7 +2,6 @@
 import * as functions from "firebase-functions";
 import admin from "firebase-admin";
 import puppeteer from "puppeteer";
-
 import { feedCalendar } from "./crawlers/kodansha-calendar";
 import { saveFeedMemo } from "./firestore-admin/feed-memo";
 

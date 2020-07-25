@@ -3,7 +3,6 @@ import admin from "firebase-admin";
 import { collectionName } from "../services/comic-release/constants";
 import { FeedMemo } from "../services/comic-release/models/feed-memo";
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const saveFeedMemo = async (
   db: admin.firestore.Firestore,
   memos: FeedMemo[],
