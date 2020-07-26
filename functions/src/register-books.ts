@@ -33,16 +33,17 @@ module.exports = functions
     for await (const doc of snap.docs) {
       const memo = doc.data() as FeedMemo;
       const title = memo.title || "";
-      const publisherName = memo.publisher || "";
+      // TODO: memo.publisher をキーにして、publishers コレクションから name を取得する
+      // const publisherName = memo.publisher === "kodansha" ? "講談社" : "";
 
       const bookItem = await findBookItem(
-        { title, publisherName },
+        { title },
         functions.config().rakuten.app_id
       );
 
       if (bookItem) {
         const authors = await findOrCreateAuthors(db, bookItem);
-        const publisher = await findPublisher(db, "kodansha");
+        const publisher = await findPublisher(db, bookItem.publisherName);
         const book = await createBook(db, memo, bookItem, authors, publisher);
         await doc.ref.update({
           isbn: book.isbn,
